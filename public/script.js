@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const ACCESS_CODE = "nisabela";
   let openedOnce = false;
 
-  // Clique na carta
+  // Abrir modal
   letter.addEventListener("click", () => {
     if (!openedOnce) {
       modal.hidden = false;
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Cancelar modal
+  // Fechar modal
   codeCancel.addEventListener("click", () => {
     modal.hidden = true;
     codeInput.value = "";
@@ -39,15 +39,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   codeInput.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      codeSubmit.click();
-    }
+    if (e.key === "Enter") codeSubmit.click();
   });
 
   // --- RSVP FORM ---
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const name = document.getElementById("name-input").value.trim();
     const presence = form.querySelector("input[name='presence']:checked")?.value;
 
@@ -65,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
 
       const data = await res.json();
-
       if (data.success) {
         msg.textContent = "✅ Confirmação registrada com sucesso!";
         msg.style.color = "green";
@@ -80,30 +76,36 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // --- Folhas caindo ---
+
+
+  // --- FOLHAS ---
   function createLeaf() {
     const leaf = document.createElement("span");
     leaf.classList.add("leaf");
 
-    leaf.style.setProperty("--x-start", `${Math.random() * 100}vw`);
+    // posição e tempo
+    leaf.style.left = (Math.random() * 100) + "vw";
     leaf.style.setProperty("--fall-duration", `${6 + Math.random() * 6}s`);
-    leaf.style.setProperty("--sway-duration", `${2 + Math.random() * 3}s`);
-    leaf.style.setProperty("--spin-duration", `${5 + Math.random() * 5}s`);
-    leaf.style.setProperty("--size", `${1 + Math.random() * 2}rem`);
 
-    leaf.innerHTML = `<span class="leaf-glyph">🍃</span>`;
+    const glyph = document.createElement("span");
+    glyph.classList.add("leaf-glyph");
+
+    const emojis = ["🍃", "🍂", "🍁"];
+    glyph.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+    glyph.style.setProperty("--sway-duration", `${2 + Math.random() * 3}s`);
+    glyph.style.setProperty("--spin-duration", `${5 + Math.random() * 5}s`);
+    glyph.style.setProperty("--size", `${1 + Math.random() * 2}rem`);
+
+    leaf.appendChild(glyph);
     document.body.appendChild(leaf);
 
-    setTimeout(() => leaf.remove(), 12000);
+    setTimeout(() => leaf.remove(), 13000);
   }
 
-  // Spawner de várias folhas
   function spawnLeaves(count = 3) {
-    for (let i = 0; i < count; i++) {
-      createLeaf();
-    }
+    for (let i = 0; i < count; i++) createLeaf();
   }
 
-  // Intervalo das folhas (mais intenso)
   setInterval(() => spawnLeaves(3), 700);
 });
