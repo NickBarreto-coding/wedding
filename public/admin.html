@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Confirmações</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 2rem; background: #f5f5f5; }
+    h1 { color: #00c176; }
+    .summary {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #fff;
+      border-radius: 8px;
+      display: flex;
+      gap: 2rem;
+      font-weight: bold;
+    }
+    .confirmed { color: green; }
+    .absent { color: red; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 0.8rem; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #d5ead5; }
+    td { background-color: #edf9ed; }
+    .delete-btn { background: red; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; }
+    .error { font-style: italic; color: #999; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Confirmações do Casamento</h1>
+  <h3>Convidados Confirmados / Ausentes</h3>
+
+  <!-- Resumo automático -->
+  <div class="summary">
+    <div class="confirmed">✅ Confirmados: <span id="count-confirmed">0</span></div>
+    <div class="absent">❌ Ausentes: <span id="count-absent">0</span></div>
+    <div>👥 Total: <span id="count-total">0</span></div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nome</th>
+        <th>Presença</th>
+        <th>Data/Hora</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody id="rsvp-table-body">
+      <tr><td colspan="4" class="error">Carregando confirmações...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    async function loadRSVP() {
+      const tbody = document.getElementById("rsvp-table-body");
+      tbody.innerHTML = "";
+
+      const confirmedEl = document.getElementById("count-confirmed");
+      const absentEl = document.getElementById("count-absent");
+      const totalEl = document.getElementById("count-total");
+
+      try {
+        const res = await fetch("/api/rsvp");
+        const data = await res.json();
+
+        // Reset contadores
+        let confirmedCount = 0;
+        let absentCount = 0;
+
+        if (!data || data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" class="error">Nenhuma confirmação registrada ainda.</td></tr>';
+        } else {
+          data.forEach((item) => {
+            const tr = document.createElement("tr");
+
+            const tdName = document.createElement("td");
+            tdName.textContent = item.name;
+            tr.appendChild(tdName);
+
+            const tdPresence = document.createElement("td");
+            tdPresence.textContent = item.presence;
+            tr.appendChild(tdPresence);
+
+            const tdDate = document.createElement("td");
+            tdDate.textContent = new Date(item.timestamp).toLocaleString("pt-BR");
+            tr.appendChild(tdDate);
+
+            const tdActions = document.createElement("td");
+            const btn = document.createElement("button");
+            btn.textContent = "Excluir";
+            btn.classList.add("delete-btn");
+            btn.onclick = async () => {
+              if (confirm(`Excluir confirmação de ${item.name}?`)) {
+                await fetch(`/api/rsvp/${item.id}`, { method: "DELETE" });
+                loadRSVP();
+              }
+            };
+            tdActions.appendChild(btn);
+            tr.appendChild(tdActions);
+
+            tbody.appendChild(tr);
+
+            // Contagem
+            if (item.presence.toLowerCase() === "sim") confirmedCount++;
+            else absentCount++;
+          });
+        }
+
+        // Atualiza resumo
+        confirmedEl.textContent = confirmedCount;
+        absentEl.textContent = absentCount;
+        totalEl.textContent = confirmedCount + absentCount;
+
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = '<tr><td colspan="4" class="error">Erro ao carregar confirmações.</td></tr>';
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadRSVP);
+  </script>
+</body>
+</html>

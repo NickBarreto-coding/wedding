@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nicholas & Isabela - Convite de Casamento</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="header"><h1></h1></div>
+
+  <main>
+    <div id="letter" tabindex="0" role="button" aria-label="Abrir convite">
+      <!-- Frente -->
+      <div class="letter-closed">Clique para abrir o convite</div>
+
+      <!-- Verso -->
+      <div class="letter-open">
+        <div class="letter-content">
+          <h1>Isabela &amp; Nicholas</h1>
+          <p>Convidamos você para celebrar o nosso casamento.</p>
+          <p><strong>Sábado, 9 de Novembro de 2025 às 11:00</strong></p>
+          <p><strong>Local:</strong> CASA FLORESTA</p>
+        </div>
+
+        <form id="rsvp-form" aria-label="Confirmação de presença">
+          <label for="name-input">Seu nome completo</label>
+          <input type="text" id="name-input" name="name" required placeholder="Seu nome" />
+          <fieldset>
+            <legend>Confirmação de Presença</legend>
+            <label><input type="radio" name="presence" value="Sim" required /> Presença</label>
+            <label><input type="radio" name="presence" value="Não" required /> Ausência</label>
+          </fieldset>
+          <button type="submit">CONFIRMAR</button>
+          <p id="form-msg" role="alert" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <!-- Modal senha -->
+  <div id="code-modal" class="modal" hidden>
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button id="code-cancel" aria-label="Fechar modal" class="close-button">&times;</button>
+      <h2 id="modal-title">Digite o código para abrir o convite</h2>
+      <input type="password" id="code-input" placeholder="Código" autocomplete="off" />
+      <button id="code-submit">Enviar</button>
+      <p id="error-msg" role="alert" aria-live="assertive"></p>
+    </div>
+  </div>
+
+  <!-- (Opcional) seu script de lógica -->
+  <script src="/script.js" defer></script>
+</body>
+</html>
