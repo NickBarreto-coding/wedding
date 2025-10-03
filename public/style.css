@@ -20,19 +20,17 @@ html,body{
 /* Main */
 main{flex-grow:1; width:90%; max-width:600px; margin:5rem auto 4rem; display:flex; justify-content:center; perspective:1000px}
 
-/* Carta (desktop fixo) */
+/* Carta */
 #letter{
   width:480px; height:640px;
   position:relative; cursor:pointer; perspective:1000px; max-width:100%;
 }
-
-/* Faces */
 .letter-closed,.letter-open{
   position:absolute; inset:0;
   border-radius:24px; backface-visibility:hidden;
   transition:transform 1s cubic-bezier(0.23,1,0.32,1);
   padding:3rem; background:url("./letter.png") center/cover no-repeat;
-  overflow:hidden; /* evita barra feia no desktop */
+  overflow:hidden;
 }
 
 /* Frente */
@@ -74,25 +72,35 @@ main{flex-grow:1; width:90%; max-width:600px; margin:5rem auto 4rem; display:fle
 #code-cancel{background:#ccc; color:#333; border:none; border-radius:8px; padding:.7rem 1.5rem; cursor:pointer}
 #code-cancel:hover{background:#999}
 
-/* ===== MOBILE SAFE (≤600px): largura via vw e altura calculada, com rolagem interna ===== */
+/* ===== MOBILE SAFE (≤600px) ===== */
 @media (max-width:600px){
   #letter{
-    width:92vw;                      /* ocupa quase toda a largura */
-    height:calc(92vw * 4 / 3);       /* mantém proporção 3:4 sem aspect-ratio */
-    max-height:90vh;                 /* nunca passa da altura da tela */
+    width:92vw;
+    height:calc(92vw * 4 / 3);
+    max-height:90vh;
   }
   .letter-closed,.letter-open{
     padding:1.25rem;
-    overflow:auto;                   /* se o conteúdo passar, rola dentro do card */
+    overflow:auto;
   }
   .letter-closed{font-size:1.7rem; padding-top:32%}
   .letter-open{font-size:.98rem}
   #rsvp-form button[type="submit"]{width:100%}
 }
 
-/* ===== Folhas (se você usa) ===== */
-.leaf{position:fixed; top:-10vh; left:var(--x-start,50vw); animation:fallY var(--fall-duration,10s) linear forwards; pointer-events:none; z-index:9999}
-.leaf-glyph{display:inline-block; font-size:var(--size,2rem); animation:swayX var(--sway-duration,3s) ease-in-out infinite alternate, spin var(--spin-duration,7s) linear infinite; transform-origin:center; opacity:.95}
+/* ===== Folhas ===== */
+.leaf{
+  position:fixed; top:-10vh;
+  left:var(--x-start,50vw);
+  animation:fallY var(--fall-duration,10s) linear forwards;
+  pointer-events:none; z-index:9999;
+}
+.leaf-glyph{
+  display:inline-block; font-size:var(--size,2rem);
+  animation:swayX var(--sway-duration,3s) ease-in-out infinite alternate,
+           spin var(--spin-duration,7s) linear infinite;
+  transform-origin:center; opacity:.95;
+}
 @keyframes fallY{from{transform:translateY(-10vh);opacity:1}to{transform:translateY(110vh);opacity:0}}
 @keyframes swayX{from{transform:translateX(-40px)}to{transform:translateX(40px)}}
 @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}

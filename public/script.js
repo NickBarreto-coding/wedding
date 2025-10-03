@@ -8,10 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("rsvp-form");
   const msg = document.getElementById("form-msg");
 
-  const ACCESS_CODE = "nisabela"; // 🔑 código correto
-  let openedOnce = false; // bloqueio do primeiro clique
+  const ACCESS_CODE = "nisabela";
+  let openedOnce = false;
 
-  // Ao clicar na carta → abre o modal
+  // Clique na carta
   letter.addEventListener("click", () => {
     if (!openedOnce) {
       modal.hidden = false;
@@ -19,26 +19,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Botão de fechar modal
+  // Cancelar modal
   codeCancel.addEventListener("click", () => {
     modal.hidden = true;
     codeInput.value = "";
     errorMsg.textContent = "";
   });
 
-  // Enviar código
+  // Validar código
   codeSubmit.addEventListener("click", () => {
     if (codeInput.value === ACCESS_CODE) {
       modal.hidden = true;
-      letter.classList.add("open"); // mostra conteúdo
+      letter.classList.add("open");
       errorMsg.textContent = "";
-      openedOnce = true; // impede reabertura
+      openedOnce = true;
     } else {
       errorMsg.textContent = "Código incorreto!";
     }
   });
 
-  // Pressionar Enter dentro do input também valida
   codeInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       codeSubmit.click();
@@ -80,4 +79,31 @@ document.addEventListener("DOMContentLoaded", () => {
       msg.style.color = "red";
     }
   });
+
+  // --- Folhas caindo ---
+  function createLeaf() {
+    const leaf = document.createElement("span");
+    leaf.classList.add("leaf");
+
+    leaf.style.setProperty("--x-start", `${Math.random() * 100}vw`);
+    leaf.style.setProperty("--fall-duration", `${6 + Math.random() * 6}s`);
+    leaf.style.setProperty("--sway-duration", `${2 + Math.random() * 3}s`);
+    leaf.style.setProperty("--spin-duration", `${5 + Math.random() * 5}s`);
+    leaf.style.setProperty("--size", `${1 + Math.random() * 2}rem`);
+
+    leaf.innerHTML = `<span class="leaf-glyph">🍃</span>`;
+    document.body.appendChild(leaf);
+
+    setTimeout(() => leaf.remove(), 12000);
+  }
+
+  // Spawner de várias folhas
+  function spawnLeaves(count = 3) {
+    for (let i = 0; i < count; i++) {
+      createLeaf();
+    }
+  }
+
+  // Intervalo das folhas (mais intenso)
+  setInterval(() => spawnLeaves(3), 700);
 });
