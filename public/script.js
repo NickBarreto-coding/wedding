@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("rsvp-form");
   const msg = document.getElementById("form-msg");
 
-  const ACCESS_CODE = "2026"; // 🔑 código correto
+  const ACCESS_CODE = "nisabela"; // 🔑 código correto
   let openedOnce = false; // bloqueio do primeiro clique
 
   // Ao clicar na carta → abre o modal
