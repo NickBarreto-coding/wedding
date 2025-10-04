@@ -24,6 +24,19 @@
     td { background-color: #edf9ed; }
     .delete-btn { background: red; color: #fff; border: none; padding: 5px 10px; cursor: pointer; border-radius: 5px; }
     .error { font-style: italic; color: #999; margin-top: 1rem; }
+    .export-btn {
+      margin-top: 1rem;
+      background: #0077cc;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+    .export-btn:hover {
+      background: #005fa3;
+    }
   </style>
 </head>
 <body>
@@ -37,7 +50,9 @@
     <div>👥 Total: <span id="count-total">0</span></div>
   </div>
 
-  <table>
+  <button class="export-btn" onclick="exportPDF()">📄 Exportar PDF</button>
+
+  <table id="rsvp-table">
     <thead>
       <tr>
         <th>Nome</th>
@@ -50,6 +65,10 @@
       <tr><td colspan="4" class="error">Carregando confirmações...</td></tr>
     </tbody>
   </table>
+
+  <!-- Lib jsPDF + autotable -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
   <script>
     async function loadRSVP() {
@@ -116,6 +135,16 @@
         console.error(err);
         tbody.innerHTML = '<tr><td colspan="4" class="error">Erro ao carregar confirmações.</td></tr>';
       }
+    }
+
+    function exportPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.text("Confirmações do Casamento", 14, 15);
+      doc.autoTable({ html: "#rsvp-table", startY: 25 });
+
+      doc.save("confirmacoes-casamento.pdf");
     }
 
     document.addEventListener("DOMContentLoaded", loadRSVP);
